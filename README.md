@@ -49,7 +49,13 @@
     root@acef54deeedb# bash /mnt/map/osm/import.sh
     ```
 
-    _Note: To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q._
+    To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q.
+
+    If we want to attach it again, we can do
+
+    ```bash
+    docker attach <container id>
+    ```
 
 6. Make sure the container is running ("up").
 
@@ -58,11 +64,8 @@
     ...
     ```
 
-    _Note: The output of the last command should show status 'Up x seconds'._
 
-##### Matcher server
-
-_Note: The following example is a quick start setup. For further details, see the [wiki](https://github.com/bmwcarit/barefoot/wiki#matcher-server)._
+## Matcher server
 
 1. Install prerequisites.
 
@@ -80,19 +83,9 @@ _Note: The following example is a quick start setup. For further details, see th
 3. Start server with standard configuration for map server and map matching, and option for GeoJSON output format.
 
     ``` bash
-    java -jar target/barefoot-<VERSION>-matcher-jar-with-dependencies.jar --geojson config/server.properties config/oberbayern.properties
+    java -jar target/barefoot-<VERSION>-matcher-jar-with-dependencies.jar --geojson config/server.properties config/harbin.properties
     ```
 
     _Note: Stop server with Ctrl-c._
 
     _Note: In case of 'parse errors', use the following Java options: `-Duser.language=en -Duser.country=US`_
-
-4. Test setup with provided sample data.
-
-    ``` bash
-    python util/submit/batch.py --host localhost --port 1234  --file src/test/resources/com/bmwcarit/barefoot/matcher/x0001-015.json
-    SUCCESS
-    ...
-    ```
-
-    _Note: On success, i.e. result code is SUCCESS, the output can be visualized with [http://geojson.io/](http://geojson.io/) and should show the same path as in the figure above. Otherwise, result code is either TIMEOUT or ERROR._
