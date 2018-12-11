@@ -18,29 +18,13 @@
 
     ``` bash
     cd barefoot
-    docker build -t barefoot-map ./map
+    docker build -t imap ./map
     ```
 
 4. Create Docker container.
 
     ``` bash
-    docker run -it -p 5432:5432 --name="barefoot-harbin" -v ${PWD}/map/:/mnt/map barefoot-map
-    ```
-
-    To allow remote access to the database
-    ```bash
-    sudo vim /etc/postgresql/9.3/main/pg_hba.conf
-    # add the line in the end
-    host all all all md5
-    # restart
-    sudo service postgresql restart
-    # save the container status
-    $ docker commit `container id` barefoot-harbin
-    ```
-
-    Once we have created the docker container, we can start it with the following command in the future
-    ```bash
-    docker start --interactive barefoot-harbin
+    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map imap
     ```
 
 5. Import OSM extract (in the container).
@@ -64,6 +48,11 @@
     ...
     ```
 
+We can restart the created container (if it is stopped)
+```bash
+docker start --interactive harbin-map
+```
+
 
 ## Matcher server
 
@@ -75,15 +64,13 @@
 2. Package Barefoot JAR. (Includes dependencies and executable main class.)
 
     ``` bash
-    mvn package
+    mvn package -DskipTests
     ```
-
-    _Note: Add `-DskipTests` to skip tests._
 
 3. Start server with standard configuration for map server and map matching, and option for GeoJSON output format.
 
     ``` bash
-    java -jar target/barefoot-<VERSION>-matcher-jar-with-dependencies.jar --geojson config/server.properties config/harbin.properties
+    java -jar target/barefoot-0.1.5-matcher-jar-with-dependencies.jar --geojson config/server.properties config/harbin.properties
     ```
 
     _Note: Stop server with Ctrl-c._
