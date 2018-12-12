@@ -6,7 +6,7 @@
 
     - Docker Engine (version 1.6 or higher, see [https://docs.docker.com/installation/ubuntulinux/](https://docs.docker.com/installation/ubuntulinux/))
 
-2. Download the map data and extract
+2. Download the map data and extract the city data
 
     ``` bash
     curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
@@ -54,7 +54,7 @@ docker start --interactive harbin-map
 ```
 
 
-## Matcher server
+## Matching server
 
 1. Install prerequisites.
 
