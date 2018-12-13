@@ -76,3 +76,7 @@ docker start --interactive harbin-map
     _Note: Stop server with Ctrl-c._
 
     _Note: In case of 'parse errors', use the following Java options: `-Duser.language=en -Duser.country=US`_
+
+## Reference
+
+P. Newson and J. Krumm. Hidden Markov Map Matching Through Noise and Sparseness. In Proceedings of International Conference on Advances in Geographic Information Systems, 2009.
