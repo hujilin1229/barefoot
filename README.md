@@ -1,4 +1,4 @@
-# Barefoot for Harbin
+# Barefoot for China Cities
 
 ## Map server
 
@@ -11,7 +11,7 @@
     ``` bash
     curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
     cd barefoot/map/osm/
-    osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=harbin.osm.pbf
+    osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=h.osm.pbf
     ```
 
 3. Build Docker image.
