@@ -5,14 +5,19 @@
 1. Install prerequisites.
 
     - Docker Engine (version 1.6 or higher, see [https://docs.docker.com/installation/ubuntulinux/](https://docs.docker.com/installation/ubuntulinux/))
+    - [osmosis](https://wiki.openstreetmap.org/wiki/Osmosis/Installation)
+    - java 
 
 2. Download the map data and extract the city data
 
     ``` bash
-    curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
+    git clone https://github.com/boathit/barefoot
     cd barefoot/map/osm/
-    osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=h.osm.pbf
+    curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
+    osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=harbin.osm.pbf
     ```
+
+    If you want to change the city, remember to modify the input in [this line](https://github.com/boathit/barefoot/blob/master/map/osm/import.sh#L28) in import.sh.
 
 3. Build Docker image.
 
