@@ -25,7 +25,7 @@ then
 	mode=$6
 elif [ "$#" -eq "0" ]
 then
-	input=/mnt/map/osm/chengdu.osm.pbf
+	input=/mnt/map/osm/harbin.osm.pbf
 	database=harbin
 	user=osmuser
 	password=pass
