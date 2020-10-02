@@ -19,17 +19,16 @@
 
     If you want to change the city, remember to modify the input in [this line](https://github.com/boathit/barefoot/blob/master/map/osm/import.sh#L28) in import.sh.
 
-3. Build Docker image.
+3. Load Existing Docker image.
 
     ``` bash
-    cd barefoot
-    docker build -t imap ./map
+    docker pull hujilin1229/barefoot_map
     ```
 
 4. Create Docker container.
 
     ``` bash
-    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map imap
+    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map barefoot_map
     ```
 
 5. Import OSM extract (in the container).
