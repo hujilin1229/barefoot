@@ -28,7 +28,7 @@
 4. Create Docker container.
 
     ``` bash
-    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map barefoot_map
+    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map hujilin1229/barefoot_map:latest
     ```
 
 5. Import OSM extract (in the container).
