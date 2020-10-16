@@ -82,6 +82,7 @@ docker start --interactive harbin-map
     _Note: In case of 'parse errors', use the following Java options: `-Duser.language=en -Duser.country=US`_
 
 4. Results infer (Hints from answers of issues from master repository).
+    
     Hi Jan,
     ids are generated during import which is necessary because OSM roads must be split to get a routable road network. Hence, each road has a unique identifier but also knows the id of the corresponding OSM road with a 1-to-n relationship.
 
