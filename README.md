@@ -11,7 +11,7 @@
 2. Download the map data and extract the city data
 
     ``` bash
-    git clone https://github.com/boathit/barefoot
+    git clone https://github.com/hujilin1229/barefoot.git
     cd barefoot/map/osm/
     curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
     osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=harbin.osm.pbf
