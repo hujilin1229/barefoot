@@ -81,6 +81,30 @@ docker start --interactive harbin-map
 
     _Note: In case of 'parse errors', use the following Java options: `-Duser.language=en -Duser.country=US`_
 
+4. Results infer (Hints from answers of issues from master repository).
+    Hi Jan,
+    ids are generated during import which is necessary because OSM roads must be split to get a routable road network. Hence, each road has a unique identifier but also knows the id of the corresponding OSM road with a 1-to-n relationship.
+
+    EDIT: The result format of the map matching library returns internal identifier that encodes the heading of the matched object. Hence, divide a road id (e.g. in SlimJSON format) by 2 where the remainder specifies the heading of your object, which is 0 for forward and 1 for backward relative to the road's direction (source node and target node of the road specify the road's direction). Example: A road id of 2001 refers to road gid 1000 where the object was heading backwards from the roads target node to the source node. In contrast, a road id of 2000 refers to road gid 1000 where the object was heading from the road's source node to the target node. This coding is library versions up to 0.0.2 and will be patched in later versions to have a more intuitive result format.
+
+    To get information about the road, you can query the DB (PostgreSQL/PostGIS) as follows (example):
+
+    sudo docker exec -it barefoot-oberbayern psql -h localhost -d oberbayern -U osmuser
+    oberbayern=> select gid,osm_id from bfmap_ways where gid=1;
+     gid | osm_id 
+    -----+--------
+       1 |     99
+    (1 row)
+    oberbayern=> select tags from ways where id=99;
+                                                 tags                                             
+    ----------------------------------------------------------------------------------------------
+     "ref"=>"FFB 11", "highway"=>"tertiary", "junction"=>"roundabout", "zone:traffic"=>"DE:urban"
+    (1 row)
+    oberbayern=> \q
+    Alternatively, you can also get road information in software with the provided API, see http://bmwcarit.github.io/barefoot/doc/index.html
+
+    I hope this helps. Please do not hesitate to ask more questions!
+    Cheers, Sebastian
 ## Reference
 
 P. Newson and J. Krumm. Hidden Markov Map Matching Through Noise and Sparseness. In Proceedings of International Conference on Advances in Geographic Information Systems, 2009.
