@@ -23,6 +23,16 @@ import binascii
 import osgeo.ogr as ogr
 import json
 
+# Coordinates to calculate the length of path
+from osgeo import osr
+source = osr.SpatialReference()
+source.ImportFromEPSG(4326)
+
+target = osr.SpatialReference()
+target.ImportFromEPSG(3857)
+
+transform = osr.CoordinateTransformation(source, target)
+
 # Import OSM (osmosis) to route
 
 
@@ -204,6 +214,8 @@ def segment(config, row):
         line.AddPoint(point.GetX(), point.GetY())
 
         if ((int(way[i][2]) >= 2) or (i == (len(way[:, 0]) - 1))):
+            line.Transform(transform)
+            length = line.Length()
             line.FlattenTo2D()
             segment = (osm_id, class_id, source, way[i][
                 1], length, reverse, maxspeed_forward,
