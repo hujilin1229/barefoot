@@ -94,7 +94,7 @@ else:
           (options.target_table, options.target_database))
     if not options.append:
         while True:
-            value = raw_input(
+            value = input(
                             "Do you want to remove table '%s' (y/n)?: " % options.target_table).lower()
             if value == 'n':
                 print("Append data to table '%s'." % options.target_table)

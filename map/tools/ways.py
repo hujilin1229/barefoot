@@ -61,7 +61,7 @@ def slim(host, port, database, table, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -94,7 +94,7 @@ def way_nodes(host, port, database, prefix, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -121,7 +121,7 @@ def node_counts(host, port, database, prefix, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -151,7 +151,7 @@ def way_counts(host, port, database, prefix, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -180,7 +180,7 @@ def way_aggs(host, port, database, prefix, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -208,7 +208,7 @@ def ways(host, port, database, table, prefix, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -232,7 +232,7 @@ def exists(host, port, database, table, user, password):
             """SELECT COUNT(tablename) FROM pg_tables WHERE 
             schemaname='public' AND tablename='%s';""" % table)
         dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -265,7 +265,7 @@ def remove(host, port, database, table, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -292,7 +292,7 @@ def index(host, port, database, table, column, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 

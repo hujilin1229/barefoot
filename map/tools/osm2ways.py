@@ -58,7 +58,7 @@ if ways.exists(options.host, options.port, options.database, options.table,
     print("Table '%s' already exists in database '%s'." %
           (options.table, options.database))
     while True:
-        value = raw_input(
+        value = input(
             "Do you want to remove table '%s' (y/n)? [n]: " % options.table).lower()
         if value == '' or value == 'n':
             print("Cancelled by user.")

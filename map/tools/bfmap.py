@@ -29,7 +29,8 @@ source = osr.SpatialReference()
 source.ImportFromEPSG(4326)
 
 target = osr.SpatialReference()
-target.ImportFromEPSG(3857)
+#target.ImportFromEPSG(3857)
+target.ImportFromEPSG(4326)
 
 transform = osr.CoordinateTransformation(source, target)
 
@@ -57,7 +58,7 @@ def ways2bfmap(src_host, src_port, src_database, src_table, src_user, src_passwo
     try:
         src_cur.execute(
             "SELECT way_id,tags,seq,nodes,counts,geoms FROM %s;" % src_table)
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -75,7 +76,7 @@ def ways2bfmap(src_host, src_port, src_database, src_table, src_user, src_passwo
         for row in rows:
             if len(row[1]) < 1 or len(row[2]) < 2:
                 continue
-
+            #print(row)
             segments_ = segment(config, row)
             segments += segments_
             roadcount += len(segments_)
@@ -87,10 +88,11 @@ def ways2bfmap(src_host, src_port, src_database, src_table, src_user, src_passwo
                 maxspeed_forward,maxspeed_backward,priority,geom) VALUES %s;""" % (
                 tgt_table, ",".join("""('%s','%s','%s','%s','%s','%s', %s, %s,'%s',
                 ST_GeomFromText('%s',4326))""" % segment for segment in segments))
+            #print(query)
             if printonly == False:
                 tgt_cur.execute(query)
             print("%s segments from %s ways inserted." % (roadcount, rowcount))
-        except Exception, e:
+        except Exception as e:
             print("Database transaction failed. (%s)" % e.pgerror)
             exit(1)
 
@@ -120,7 +122,7 @@ def type(config, tags):
     key = None
     value = None
     for tag in tags.keys():
-        tag_ = tag.decode('utf-8')
+        tag_ = tag
         if tag_ in config.keys():
             if tags[tag_] in config[tag_].keys():
                 key = tag_
@@ -195,7 +197,8 @@ def segment(config, row):
 
     osm_id = row[0]
     class_id = int(config[key][value][0])
-    source = way[0][1]
+    source = way[0][1].decode()
+    #print(source)
     length = 1
     if (is_oneway(tags)):
         reverse = -1
@@ -218,12 +221,12 @@ def segment(config, row):
             length = line.Length()
             line.FlattenTo2D()
             segment = (osm_id, class_id, source, way[i][
-                1], length, reverse, maxspeed_forward,
+                1].decode(), length, reverse, maxspeed_forward,
                 maxspeed_backward,
                 priority, line.ExportToWkt())
             segments.append(segment)
 
-            source = way[i][1]
+            source = way[i][1].decode()
             line = ogr.Geometry(ogr.wkbLineString)
             point = ogr.CreateGeometryFromWkb(
                 binascii.unhexlify(way[i][3]))
@@ -247,7 +250,7 @@ def exists(host, port, database, table, user, password):
             """SELECT COUNT(tablename) FROM pg_tables 
             WHERE schemaname='public' AND tablename='%s';""" % table)
         dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -279,7 +282,7 @@ def remove(host, port, database, table, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
@@ -316,7 +319,7 @@ def schema(host, port, database, table, user, password, printonly):
             else:
                 cursor.execute(query)
                 dbcon.commit()
-        except Exception, e:
+        except Exception(e):
             print("Database transaction failed. (%s)" % e.pgerror)
             
         try:
@@ -327,7 +330,7 @@ def schema(host, port, database, table, user, password, printonly):
             else:
                 cursor.execute(query)
                 dbcon.commit()
-        except Exception, e:
+        except Exception(e):
             print("Database transaction failed. (%s)" % e.pgerror)
     
         cursor.close()
@@ -352,7 +355,7 @@ def index(host, port, database, table, user, password, printonly):
         else:
             cursor.execute(query)
             dbcon.commit()
-    except Exception, e:
+    except Exception(e):
         print("Database transaction failed. (%s)" % e.pgerror)
         exit(1)
 
