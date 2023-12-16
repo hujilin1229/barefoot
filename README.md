@@ -64,6 +64,7 @@ docker start --interactive harbin-map
 
     - Maven (e.g. with `sudo apt-get install maven`)
     - Java JDK (Java version 7 or higher, e.g. with `sudo apt-get install openjdk-1.7-jdk`)
+    - Java JDK (brew install java)
 
 2. Package Barefoot JAR. (Includes dependencies and executable main class.)
 
