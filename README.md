@@ -56,6 +56,7 @@
 We can restart the created container (if it is stopped)
 ```bash
 docker start --interactive harbin-map
+root@acef54deeedb# service postgresql start
 ```
 
 
