@@ -34,6 +34,7 @@
 5. Import OSM extract (in the container).
 
     ``` bash
+    root@acef54deeedb# service postgresql start
     root@acef54deeedb# bash /mnt/map/osm/import.sh
     ```
 
