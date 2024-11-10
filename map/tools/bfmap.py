@@ -27,13 +27,13 @@ import json
 from osgeo import osr
 source = osr.SpatialReference()
 source.ImportFromEPSG(4326)
+source.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
 
 target = osr.SpatialReference()
-#target.ImportFromEPSG(3857)
-target.ImportFromEPSG(4326)
+target.ImportFromEPSG(3857)
 
 transform = osr.CoordinateTransformation(source, target)
-
+transform2 = osr.CoordinateTransformation(target, source)
 # Import OSM (osmosis) to route
 
 
@@ -219,6 +219,7 @@ def segment(config, row):
         if ((int(way[i][2]) >= 2) or (i == (len(way[:, 0]) - 1))):
             line.Transform(transform)
             length = line.Length()
+            line.Transform(transform2)
             line.FlattenTo2D()
             segment = (osm_id, class_id, source, way[i][
                 1].decode(), length, reverse, maxspeed_forward,
