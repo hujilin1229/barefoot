@@ -108,6 +108,7 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
                 jsonsamples.put(jsonsample);
             }
         }
+	System.out.println("Sequence: " + jsonsamples.toString());
         output.append(jsonsamples.toString());
         output.append("\n");
 
@@ -125,9 +126,59 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
                     jsoncandidate.put("geom", GeometryEngine.geometryToWkt(
                             candidate.point().geometry(), WktExportFlags.wktExportPoint));
                 }
+		// System.out.println("Candidates: " + jsoncandidate.toString());
                 jsonsequence.put(jsoncandidate);
             }
         }
+	System.out.println("Output: " + jsonsequence.toString());
+        output.append(jsonsequence.toString());
+
+        return output.toString();
+    }
+
+    /**
+     * Gets JSON format String of {@link MatcherKState}, includes {@link JSONArray} String of
+     * samples and {@link JSONArray} String of of matching results.
+     *
+     * @return JSON format String of {@link MatcherKState}, includes {@link JSONArray} String of
+     *         samples and {@link JSONArray} String of of matching results.
+     * @throws JSONException thrown on JSON extraction or parsing error.
+     */
+    public String toMapMatchJSON() throws JSONException {
+        StringBuilder output = new StringBuilder();
+
+        JSONArray jsonsamples = new JSONArray();
+        if (this.samples() != null) {
+            for (int i = 0; i < this.samples().size(); ++i) {
+                JSONObject jsonsample = new JSONObject();
+                jsonsample.put("id", this.samples().get(i).id());
+                jsonsample.put("geom", GeometryEngine.geometryToWkt(this.samples().get(i).point(),
+                        WktExportFlags.wktExportPoint));
+                jsonsample.put("time", this.samples().get(i).time() / 1000);
+                jsonsamples.put(jsonsample);
+            }
+        }
+        System.out.println("Sequence: " + jsonsamples.toString());
+        output.append(jsonsamples.toString());
+        output.append("\n");
+
+        JSONArray jsonsequence = new JSONArray();
+        if (this.sequence() != null) {
+            for (int i = 0; i < this.sequence().size(); ++i) {
+                MatcherCandidate candidate = this.sequence().get(i);
+                JSONObject jsoncandidate = candidate.point().toJSON();
+                jsoncandidate.put("time", this.samples().get(i).time() / 1000);
+                if (candidate.transition() != null) {
+                    jsoncandidate.put("route_geom",
+                            GeometryEngine.geometryToWkt(candidate.transition().route().geometry(),
+                                    WktExportFlags.wktExportLineString));
+		    jsonsequence.put(candidate.transition().route().toJSON());
+                }
+                // System.out.println("Candidates: " + jsoncandidate.toString());
+                jsonsequence.put(jsoncandidate);
+            }
+        }
+        System.out.println("Output: " + jsonsequence.toString());
         output.append(jsonsequence.toString());
 
         return output.toString();
@@ -151,6 +202,7 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
                             GeometryEngine.geometryToWkt(candidate.transition().route().geometry(),
                                     WktExportFlags.wktExportLineString));
                 }
+		System.out.println("Hello " + jsoncandidate.toString());
                 json.put(jsoncandidate);
             }
         }

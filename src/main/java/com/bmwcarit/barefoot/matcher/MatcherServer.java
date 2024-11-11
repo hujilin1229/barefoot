@@ -160,6 +160,21 @@ public class MatcherServer extends AbstractServer {
         }
     }
 
+    /**
+     * Output formatter for writing extensive format of input and output of map matching in a JSON
+     * response message.
+     */
+    public static class MapMatchJSONOutputFormatter extends OutputFormatter {
+        @Override
+        public String format(String request, MatcherKState output) {
+            try {
+                return output.toMapMatchJSON();
+            } catch (JSONException e) {
+                throw new RuntimeException("creating JSON response: " + e.getMessage());
+            }
+        }
+    }
+
     private static class AdaptiveOutputFormatter extends OutputFormatter {
         private final OutputFormatter defaultFormatter;
 
@@ -184,7 +199,9 @@ public class MatcherServer extends AbstractServer {
                                 return new GeoJSONOutputFormatter().format(request, output);
                             case "debug":
                                 return new DebugJSONOutputFormatter().format(request, output);
-                            default:
+                            case "mapmatch":
+                                return new MapMatchJSONOutputFormatter().format(request, output);
+			    default:
                                 break;
                         }
                     }
