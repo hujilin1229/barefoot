@@ -172,8 +172,12 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
                     jsoncandidate.put("route_geom",
                             GeometryEngine.geometryToWkt(candidate.transition().route().geometry(),
                                     WktExportFlags.wktExportLineString));
-		    jsonsequence.put(candidate.transition().route().toJSON());
+		            jsoncandidate.put("route", candidate.transition().route().toJSON());
                 }
+//                else {
+//                    jsoncandidate.put("route_geom", GeometryEngine.geometryToWkt(
+//                            candidate.point().geometry(), WktExportFlags.wktExportPoint));
+//                }
                 // System.out.println("Candidates: " + jsoncandidate.toString());
                 jsonsequence.put(jsoncandidate);
             }
