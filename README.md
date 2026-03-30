@@ -5,40 +5,29 @@
 1. Install prerequisites.
 
     - Docker Engine (version 1.6 or higher, see [https://docs.docker.com/installation/ubuntulinux/](https://docs.docker.com/installation/ubuntulinux/))
-    - [osmosis](https://wiki.openstreetmap.org/wiki/Osmosis/Installation)
     - java 
 
 2. Download the map data and extract the city data
 
-    ``` bash
-    git clone https://github.com/hujilin1229/barefoot.git
-    cd barefoot/map/osm/
-    curl http://download.geofabrik.de/asia/china-latest.osm.pbf -o barefoot/map/osm/china.osm.pbf
-    osmosis --read-pbf file=china-latest.osm.pbf --bounding-box left=126.506130 right=126.771862 bottom=45.657920 top=45.830905 --write-pbf file=harbin.osm.pbf
-    ```
+	```bash
+	git clone https://github.com/hujilin1229/barefoot.git
+	cd barefoot
+	```
+3. Pull any Postgres+Postgis image 
 
-    If you want to change the city, remember to modify the input in [this line](https://github.com/boathit/barefoot/blob/master/map/osm/import.sh#L28) in import.sh.
-
-3. Load Existing Docker image.
-
-    ``` bash
-    docker pull hujilin1229/barefoot_map
-    ```
-
-4. Create Docker container.
-
-    ``` bash
-    docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map hujilin1229/barefoot_map:latest
-    ```
-
-5. Import OSM extract (in the container).
+	```bash
+	docker pull docker.io/kartoza/postgis:18-3.6--v2026.03.24
+	docker run -it --name harbin_map --restart=always -e POSTGRES_USER=osmuser -e POSTGRES_PASSWORD=pass -p 5432:5432 -v ${PWD}/map/:/mnt/map  -d kartoza/postgis:18-3.6--v2026.03.24
+	```
+4. Import OSM Data (in the container).
 
     ``` bash
     root@acef54deeedb# service postgresql start
-    root@acef54deeedb# bash /mnt/map/osm/import.sh
+    root@acef54deeedb# su - postgres -c "psql harbin"
+    root@acef54deeedb# su - postgres -c "psql -d harbin -U postgres -f /mnt/map/backup.sql"
     ```
 
-    To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q.
+<!--    To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q.
 
     If we want to attach it again, we can do
 
@@ -46,18 +35,20 @@
     docker attach <container id>
     ```
 
-6. Make sure the container is running ("up").
+5. Make sure the container is running ("up").
 
     ``` bash
     docker ps -a
     ...
     ```
 
-We can restart the created container (if it is stopped)
-```bash
-docker start --interactive harbin-map
-root@acef54deeedb# service postgresql start
-```
+
+6. We can restart the created container (if it is stopped)
+	
+	```bash
+	docker start --interactive harbin_map
+	root@acef54deeedb# service postgresql start
+	```-->
 
 
 ## Matching server
