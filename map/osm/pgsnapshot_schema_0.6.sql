@@ -1,5 +1,11 @@
--- Database creation script for the snapshot PostgreSQL schema.
-
+DROP SCHEMA IF EXISTS public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+ALTER SCHEMA public OWNER TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
 -- Drop all tables if they exist.
 DROP TABLE IF EXISTS actions;
 DROP TABLE IF EXISTS users;

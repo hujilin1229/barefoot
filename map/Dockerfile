@@ -1,5 +1,4 @@
-
-
+#
 # Copyright (C) 2015, BMW Car IT GmbH
 #
 # Author: Sebastian Mattheis <sebastian.mattheis@bmw-carit.de>
@@ -12,15 +11,11 @@
 # language governing permissions and limitations under the License.
 #
 
-FROM ubuntu:16.04
+FROM crccheck/postgis
 
-
-MAINTAINER sebastian.mattheis@bmw-carit.de
 
 ADD /pgsql/ /opt/pgsql/
-#RUN apt-get update && apt-get -y install python3 patch git 
-RUN apt-get update && apt-get -y install python3 python3-psycopg2 python3-numpy python3-gdal patch git postgresql-17-postgis-3
-#RUN pip install psycopg2 numpy gdal
-RUN patch /etc/postgresql/17/main/postgresql.conf < /opt/pgsql/postgresql.conf.patch && patch /etc/postgresql/17/main/pg_hba.conf < /opt/pgsql/pg_hba.conf.patch && echo "export HOME=/root" >> /root/.bashrc
-RUN apt-get install osmosis && echo "export PATH=${PATH}:/opt/osmosis/package/bin" >> /root/.bashrc && echo "host all all all md5" >> /etc/postgresql/17/main/pg_hba.conf
+RUN apt-get update && apt-get -y install patch git openjdk-7-jdk python-psycopg2 python-numpy python-gdal
+RUN patch /etc/postgresql/9.3/main/postgresql.conf < /opt/pgsql/postgresql.conf.patch && patch /etc/postgresql/9.3/main/pg_hba.conf < /opt/pgsql/pg_hba.conf.patch && echo "export HOME=/root" >> /root/.bashrc
+RUN cd /opt/ && git clone https://github.com/openstreetmap/osmosis.git && cd osmosis && git checkout tags/0.43.1 && ./gradlew assemble && echo "export PATH=${PATH}:/opt/osmosis/package/bin" >> /root/.bashrc && echo "host all all all md5" >> /etc/postgresql/9.3/main/pg_hba.conf
 CMD service postgresql start && /bin/bash --rcfile /root/.bashrc

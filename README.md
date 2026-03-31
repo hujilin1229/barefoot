@@ -1,7 +1,8 @@
 # Barefoot for China Cities
 
-## Map server
+## Map Database
 
+### Method1 - Build from Docker
 1. Install prerequisites.
 
     - Docker Engine (version 1.6 or higher, see [https://docs.docker.com/installation/ubuntulinux/](https://docs.docker.com/installation/ubuntulinux/))
@@ -27,7 +28,27 @@
     root@acef54deeedb# su - postgres -c "psql -d harbin -U postgres -f /mnt/map/backup.sql"
     ```
 
-<!--    To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q.
+### Method2 - Pull from existing image 
+
+1. Pull Docker and Run Container
+
+	#### x86/amd64 Users
+	```bash
+	git clone git@github.com:hujilin1229/barefoot.git
+	cd barefoot
+	docker pull garygb/barefoot_map
+	docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map garygb/barefoot_map:latest
+	```
+
+	#### Arm Users
+	```bash
+	git clone git@github.com:hujilin1229/barefoot.git
+	cd barefoot
+	docker pull hujilin1229/barefoot_map
+	docker run -it -p 5432:5432 --name="harbin-map" -v ${PWD}/map/:/mnt/map hujilin1229/barefoot_map:latest
+	```
+
+2. To detach the interactive shell from a running container without stopping it, use the escape sequence Ctrl-p + Ctrl-q.
 
     If we want to attach it again, we can do
 
@@ -35,7 +56,7 @@
     docker attach <container id>
     ```
 
-5. Make sure the container is running ("up").
+3. Make sure the container is running ("up").
 
     ``` bash
     docker ps -a
@@ -43,12 +64,12 @@
     ```
 
 
-6. We can restart the created container (if it is stopped)
+4. We can restart the created container (if it is stopped)
 	
 	```bash
 	docker start --interactive harbin_map
 	root@acef54deeedb# service postgresql start
-	```-->
+	```
 
 
 ## Matching server

@@ -1,0 +1,42 @@
+
+
+# Copyright (C) 2015, BMW Car IT GmbH
+#
+# Author: Sebastian Mattheis <sebastian.mattheis@bmw-carit.de>
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License. You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in
+# writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
+#
+
+FROM docker.io/kartoza/postgis:18-3.6--v2026.03.24
+
+ADD ./pgsql/ /opt/pgsql/
+
+# 安装依赖
+RUN apt-get update && apt-get -y install \
+    python3 \
+    python3-psycopg2 \
+    python3-numpy \
+    python3-gdal \
+    patch \
+    git \
+    sudo \
+    osmosis
+
+# 打配置补丁
+RUN patch /etc/postgresql/18/main/postgresql.conf < /opt/pgsql/postgresql.conf.patch
+
+# 配置环境变量
+RUN echo "export HOME=/root" >> /root/.bashrc && \
+    echo 'export PATH=$PATH:/opt/osmosis/package/bin' >> /root/.bashrc
+
+# 授权修复（解决 public schema 权限问题）
+RUN echo "ALTER SCHEMA public OWNER TO postgres;" > /docker-entrypoint-initdb.d/99_permission_fix.sql
+
+# 重要：不要覆盖原镜像 CMD！保留官方启动方式
+# 下面这一行是唯一正确的 CMD，不要改！
+CMD ["/start.sh"]
